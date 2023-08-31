@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h2>Crime Reports</h2>
+<ul class="crime-list">
+    {% for report in reports %}
+    <li>
+        <h3>{{ report.title }}</h3>
+        <p>{{ report.description }}</p>
+        <p>Reported by: {{ report.user.username }}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
