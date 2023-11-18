@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 from flask import Flask, render_template, request, redirect, url_for
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField
@@ -18,12 +17,18 @@ bcrypt = Bcrypt(app)
 app.config['SECRET_KEY'] = SECRET_KEY
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql:///{}:{}@{}/{}'.format(MYSQL_USER, MYSQL_PASSWORD, MYSQL_HOST, MYSQL_DB)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///crime_report.db'
-# Configure database
 
+# Configure database
+db.init_app(app)
 # Configure login manager
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+
+@app.before_request
+def create_tables():
+    db.create_all()
 
 
 #another example of user class db
@@ -47,12 +52,12 @@ class RegisterForm(FlaskForm):
     submit = SubmitField('Register')
 
 #added validation
-def validate_username(self, username):
-    existing_user_username = User.query.filter_by(
-                                                  username=username.data).first()
-    if existing_user_username:
-        raise ValidationError(
-                              'That username already exists.Please choose a different one.')
+    def validate_username(self, username):
+        existing_user_username = User.query.filter_by(
+                                                      username=username.data).first()
+        if existing_user_username:
+            raise ValidationError(
+                                  'That username already exists.Please choose a different one.')
 
 class LoginForm(FlaskForm):
     username = StringField(validators=[InputRequired(),
@@ -128,7 +133,7 @@ def login():
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    return render_template('./user/dashboard.html')
+    return render_template('./user/layout.html')
 
 
 @app.route('/logout', methods=['GET', 'POST'])
