@@ -1,16 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .section {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .incident-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .incident-item {
+            border-bottom: 1px solid #ddd;
+            padding: 0.75rem 0;
+        }
+        .report-button {
+            background-color: #333;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .report-button:hover {
+            background-color: #c2c7c7;
+        }
+    </style>
 </head>
-
 <body>
-    <h1>Hello you are logged in.</h1>
-    <a href="{{url_for('logout')}}">Press here to logout</a>
-</body>
+    <div class="header">
+        <h4>Hello you are logged in.</h4>
+        <title>{% block title %}Crime Reporting System{% endblock %}</title>
+    </div>
 
+    <div class="container">
+        <div class="report-form" role="menu">
+            <h2>Report Crime</h2>
+            <form id="crime-form" method="post">
+                <label for="reporter">Reporter:</label>
+                <input type="text" id="reporter" name="reporter" required><br>
+                <label for="suspect">Suspect:</label>
+				<input type="text" id="suspect" name="suspect" required><br>
+                <label for="suspect">Location:</label>
+                <input type="text" id="location" name="location" required><br>
+                <label for="description">Description:</label><br>
+                <textarea id="description" name="description" rows="4" required></textarea><br>
+                <label for="crime_type">crime_type:</label><br>
+                <button id="submit-button">Submit Report</button>
+            </form>
+        </div>
+        <div class="section">
+            <h2>Reported Incidents</h2>
+            <ul class="incident-list">
+                <li class="incident-item">Robbery - XYZ Street</li>
+                <li class="incident-item">Assault - ABC Park</li>
+                <li class="incident-item">Burglary - 123 Avenue</li>
+            </ul>
+        </div>
+        <button class="report-button">Report Crime</button>
+        <a href="{{url_for('logout')}}">Press here to logout</a>
+    </div>
+</body>
 </html>

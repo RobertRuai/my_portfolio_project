@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 from flask import Flask, render_template, request, redirect, url_for
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, InputRequired, Length, EqualTo
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from models.base_model import CrimeRecord
+from models.base_model import CrimeReport
 from config import SECRET_KEY
 from flask_bcrypt import Bcrypt
 from config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB
@@ -31,7 +31,6 @@ def create_tables():
     db.create_all()
 
 
-#another example of user class db
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), nullable=False, unique=True)
@@ -51,7 +50,7 @@ class RegisterForm(FlaskForm):
 
     submit = SubmitField('Register')
 
-#added validation
+    #added validation
     def validate_username(self, username):
         existing_user_username = User.query.filter_by(
                                                       username=username.data).first()
@@ -67,8 +66,18 @@ class LoginForm(FlaskForm):
     password = PasswordField(validators=[InputRequired(),
                              Length(min=8, max=20)],
                              render_kw={"placeholder": "Password"})
-
     submit = SubmitField('Login')
+
+
+class CrimeReportForm(FlaskForm):
+    type_crimes = ['Assault', 'Robbery', 'Murder', 'Theft', 'Miscellenious', 'Other']
+    reporter = StringField("Reporter's Name", validators=[DataRequired()])
+    suspect = StringField('Suspect', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
+    location = StringField('Location of crime', validators=[DataRequired()])
+    crime_type = SelectField('Select an option', chioces=type_crimes)
+    submit = SubmitField('Submit Report')
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -133,8 +142,27 @@ def login():
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
-    return render_template('./user/layout.html')
+    return render_template('./user/dashboard1.html')
 
+
+@app.route('/report', methods=['POST'])
+@login_required
+def repoort_crime():
+    form = crimeReportForm()
+    if form.validate_on_submit():
+        reporter = form.reporter.data
+        suspect = form.suspect.data
+        description = form.description.data
+        location = form.location.data
+        crime_type = form.my_dropdown.data
+        report = CrimeReport(
+                             reporter=reporter, description=description,
+                             suspect=suspect, location=location,
+                             crime_type=crime_type)
+        db.session.add(report)
+        db.session.commit()
+        return jsonify({'message': 'Crime report submitted successfully'}), 201
+    return jsonify({'error': 'Form validation failed'}), 400
 
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required

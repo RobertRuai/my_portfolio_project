@@ -6,19 +6,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <style>
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        color: #ffffff;
+        background-color: #7aa8b7;
+        border-radius: 6px;
+        outline: none;
+        transition: 0.3s;
+      }
+      .button:hover {
+        background-color: #c2c7c7;
+      }
+    </style>
 </head>
 
 <body>
-    <h1>Register Page</h1>
-
-    <form method="POST" action="">
+    <form method="POST" action="" style="text-align:center" novalidate>
+        <h1>Register Page</h1>
         {{ form.hidden_tag() }}
-        {{ form.username }}
-        {{ form.password }}
-        {{ form.submit }}
+        <p>{{ form.username }}</p>
+        <p>{{ form.password }}</p>
+        <p>{{ form.submit }}</p>
+        <a class="button" href="{{ url_for('login') }}">Already have an account? Log In</a>
     </form>
-
-    <a href="{{ url_for('login') }}">Already have an account? Log In</a>
 </body>
 
 </html>

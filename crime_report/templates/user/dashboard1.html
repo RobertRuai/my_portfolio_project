@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles1.css') }}">
+    <title>Dashboard with Tabs</title>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="logo">Dashboard</div>
+            <ul>
+                <li><a href="#">Applications</a></li>
+                <li><a href="#">Table 1</a></li>
+                <li><a href="#">Table 2</a></li>
+            </ul>
+            <div class="user-icon">User Icon</div>
+        </div>
+        <div class="main-content">
+            <div class="tabs">
+                <div class="tab" onclick="changeTab('applications')">Applications</div>
+                <div class="tab" onclick="changeTab('table1')">Table 1</div>
+                <div class="tab" onclick="changeTab('table2')">Table 2</div>
+            </div>
+            <div id="applications" class="tab-content active">
+                <h1>Application List</h1>
+                <ul>
+                    <li>App 1</li>
+                    <li>App 2</li>
+                    <li>App 3</li>
+                </ul>
+            </div>
+            <div id="table1" class="tab-content">
+                <h1>Table 1 Content</h1>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Item 1</td>
+                            <td>Description 1</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Item 2</td>
+                            <td>Description 2</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="table2" class="tab-content">
+                <h1>Table 2 Content</h1>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Task 1</td>
+                            <td>Completed</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Task 2</td>
+                            <td>In Progress</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeTab(tabId) {
+            // Hide all tab contents
+            var tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(function (tabContent) {
+                tabContent.classList.remove('active');
+            });
+
+            // Show the selected tab content
+            var selectedTab = document.getElementById(tabId);
+            selectedTab.classList.add('active');
+        }
+    </script>
+</body>
+</html>
